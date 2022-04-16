@@ -4,7 +4,7 @@
 [![Gmail Badge](https://img.shields.io/badge/-cabalunaharoldedsel@immaculada.edu.ph-c14438?style=flat-square&logo=Gmail&logoColor=white&link=mailto:cabalunaharoldedsel@immaculada.edu.ph)](mailto:cabalunaharoldedsel@immaculada.edu.ph)
 
 <p align="center">
-  <img src="https://github.com/GhostPoltergeist/TheNumberGame/blob/main/preview.png" height="200"/>
+  <img src="https://github.com/GhostPoltergeist/TheNumberGame/blob/main/whole.png" height="200"/>
 </a></p>
 
 ![GitHub Issues](https://img.shields.io/github/issues/GhostPoltergeist/TheNumberGame)
