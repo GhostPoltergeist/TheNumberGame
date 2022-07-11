@@ -1,3 +1,3 @@
 package program.game.start;
 
-public record Health(int health) {}
+public record Health(int remainingHealth) { }
