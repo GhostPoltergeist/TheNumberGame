@@ -52,16 +52,23 @@ public class GameUtil extends Util {
         System.out.println("\n" + RED_BOLD_BRIGHT + "|> TIE SCORES <|" + RESET);
         System.out.println(RED_BOLD_BRIGHT + "|> HEALTH: " + health.remainingHealth() + " <|" + RESET);
         //GameNotice
-
+        isOutOfLives(health);
         System.out.println("\n" + TIE_TEXT[new Random().nextInt(TIE_TEXT.length)]);
         if (tryAgain) getResponse(health, doesWonWhenLost);
+        else getResult(health, false, doesWonWhenLost);
     }
 
     public static void getResponse(Health health, boolean doesWonWhenLost) throws InterruptedException {
-        System.out.print(RED_BOLD_BRIGHT + "|> [Y/N] Play Again?: " + RESET);
-        String answer = INPUT.next();
-        if (answer.matches("^[Y|y]$")) NumberGame.start(new Health(health.remainingHealth()), doesWonWhenLost);
-        if (answer.matches("^[N|n]$")) System.exit(0);
+        String response;
+        do {
+            System.out.print(RED_BOLD_BRIGHT + "|> [Y/N] Play Again?: " + RESET);
+            response = INPUT.nextLine().trim();
+            if (isYes.or(isNo).test(response)) {
+                if (isYes.test(response)) NumberGame.start(new Health(health.remainingHealth()), doesWonWhenLost);
+                else if (isNo.test(response)) exit();
+                else System.out.println(RED_BOLD_BRIGHT + "PLEASE ENTER Y or N" + RESET);
+            } else System.out.println(RED_BOLD_BRIGHT + "Y or N only" + RESET);
+        } while (isLetter.and(isYes).and(isNo).negate().test(response));
     }
 
     public static void getResult(Health health, boolean isUserTheFirstOneToBet, boolean doesWonWhenLost) throws InterruptedException {
@@ -79,22 +86,36 @@ public class GameUtil extends Util {
         }
 
         if (userBet > computerBet) win(true, health, doesWonWhenLost);   /*  Win  */
-        else if (userBet < computerBet) lose(health);   /*  Lose */
+        else if (userBet < computerBet) lose(doesWonWhenLost ? new Health(health.remainingHealth() - 1) : health);   /*  Lose */
         else tie(true, health, doesWonWhenLost);                         /*  Tie  */
     }
 
     public static int getComputerBet() throws InterruptedException {
         System.out.println(RED_BOLD_BRIGHT + "|> Please Wait, Computer is now picking <|" + RESET);
         Thread.sleep(new Random().nextInt(1000) + 1);
-        int bet = (int) (Math.random() * 999) + 1;
-        System.out.println("BET: " + bet);
+        return (int) (Math.random() * 999) + 1;
+    }
+
+    /** @noinspection BusyWait*/
+    public static int getUserBet() throws InterruptedException {
+        String temp;
+        int bet = 0;
+        do {
+            System.out.println(RED_BOLD_BRIGHT + "|> Pick A Number <|" + RESET);
+            Thread.sleep(new Random().nextInt(1000) + 1);
+            System.out.print(CYAN_BOLD_BRIGHT + "|> Please Bet A Number: " + RESET);
+            temp = INPUT.nextLine().trim();
+            if (isNumber.test(temp)) bet = Integer.parseInt(temp);
+            else System.out.println(RED_BOLD_BRIGHT + "PLEASE ENTER A VALID BET" + RESET);
+
+        } while (isNumber.negate().test(temp));
         return bet;
     }
 
-    public static int getUserBet() throws InterruptedException {
-        System.out.println(RED_BOLD_BRIGHT + "|> Pick A Number <|" + RESET);
-        Thread.sleep(new Random().nextInt(1000) + 1);
-        System.out.print(CYAN_BOLD_BRIGHT + "|> Please Bet A Number: " + RESET);
-        return (INPUT.nextInt());
+    public static void isOutOfLives(Health health) throws InterruptedException {
+        if (health.remainingHealth() == 0) /* Lose */ {
+            System.out.println("\n" + RED_BOLD_BRIGHT + ">| Out Of Lives <|" + RESET);
+            getResponse(new Health(5), false);
+        }
     }
 }
