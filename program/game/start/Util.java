@@ -3,6 +3,8 @@ package program.game.start;
 import java.util.Random;
 import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Predicate;
+import java.util.regex.Pattern;
 
 public class Util {
     // Reset
@@ -132,11 +134,26 @@ public class Util {
                 printArt(art);
         }
     }
-
+    public static void exit() {
+        System.out.println(BLUE_BOLD_BRIGHT + "\n" +
+                "████████╗██╗  ██╗ █████╗ ███╗   ██╗██╗  ██╗    ██╗   ██╗ ██████╗ ██╗   ██╗\n" +
+                "╚══██╔══╝██║  ██║██╔══██╗████╗  ██║██║ ██╔╝    ╚██╗ ██╔╝██╔═══██╗██║   ██║\n" +
+                "   ██║   ███████║███████║██╔██╗ ██║█████╔╝      ╚████╔╝ ██║   ██║██║   ██║\n" +
+                "   ██║   ██╔══██║██╔══██║██║╚██╗██║██╔═██╗       ╚██╔╝  ██║   ██║██║   ██║\n" +
+                "   ██║   ██║  ██║██║  ██║██║ ╚████║██║  ██╗       ██║   ╚██████╔╝╚██████╔╝\n" +
+                "   ╚═╝   ╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═══╝╚═╝  ╚═╝       ╚═╝    ╚═════╝  ╚═════╝ \n" +
+                "                                                                          \n" + RESET);
+        System.exit(0);
+    }
     private static void printArt(String art) throws InterruptedException {
         for (int i = 0; i < art.length(); i++) {
             System.out.print(art.charAt(i));
             TimeUnit.MILLISECONDS.sleep(1);
         }
     }
+
+    public static Predicate<String> isNumber = input -> Pattern.compile("^\\d{1,5}$").matcher(input).matches();
+    public static Predicate<String> isLetter = input -> Pattern.compile("^[a-z|A-Z]$").matcher(input).matches();
+    public static Predicate<String> isYes = input -> Pattern.compile("^[Y|y]$").matcher(input).matches();
+    public static Predicate<String> isNo = input -> Pattern.compile("^[N|n]$").matcher(input).matches();
 }
